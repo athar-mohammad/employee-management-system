@@ -1,5 +1,6 @@
 package com.athar.ems.exception;
 
+import com.athar.ems.dto.response.ApiResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -36,12 +37,12 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
     }
     @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<ErrorDetails> handleResourceNotFoundException(ResourceNotFoundException exception) {
+    public ResponseEntity<ApiResponse<ErrorDetails>> handleResourceNotFoundException(ResourceNotFoundException exception) {
         ErrorDetails error = new ErrorDetails(
                 LocalDateTime.now(),
                 exception.getMessage(),
                 "Resource Not found"
         );
-        return new ResponseEntity<>(error, HttpStatus.CONFLICT);
+        return new ResponseEntity<>(ApiResponse.error(error.getMessage()),HttpStatus.CONFLICT);
     }
 }
