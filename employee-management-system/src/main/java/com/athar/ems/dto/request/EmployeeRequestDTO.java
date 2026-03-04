@@ -1,9 +1,21 @@
 package com.athar.ems.dto.request;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+
 public class EmployeeRequestDTO {
 
+    @NotBlank(message = "First name can not be empty")
+    @Size(min = 2, max = 50)
     private String firstName;
+
+    @NotBlank(message = "Last can not be empty")
+    @Size(min = 2, max = 50)
     private String lastName;
+
+    @Email(message = "Email must be valid")
+    @NotBlank(message = "Email can not be blank")
     private String email;
 
     public EmployeeRequestDTO() {}

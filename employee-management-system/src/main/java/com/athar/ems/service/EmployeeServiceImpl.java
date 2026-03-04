@@ -1,6 +1,7 @@
 package com.athar.ems.service;
 
 import com.athar.ems.exception.ResourceAlreadyExistsException;
+import com.athar.ems.exception.ResourceNotFoundException;
 import com.athar.ems.mapper.EmployeeMapper;
 import com.athar.ems.dto.request.EmployeeRequestDTO;
 import com.athar.ems.dto.response.EmployeeResponseDTO;
@@ -9,6 +10,8 @@ import com.athar.ems.repository.EmployeeRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService{
@@ -34,5 +37,11 @@ public class EmployeeServiceImpl implements EmployeeService{
     public List<EmployeeResponseDTO> getAllEmployee() {
         List<Employee> employees = employeeRepository.findAll();
         return employees.stream().map(EmployeeMapper::mapToEmployeeResponseDTO).toList();
+    }
+
+    @Override
+    public EmployeeResponseDTO getEmployeeById(Long id) {
+        Employee byId = employeeRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("User not found by the Id: "+id));
+        return EmployeeMapper.mapToEmployeeResponseDTO(byId);
     }
 }

@@ -3,6 +3,7 @@ package com.athar.ems.controller;
 import com.athar.ems.dto.request.EmployeeRequestDTO;
 import com.athar.ems.dto.response.EmployeeResponseDTO;
 import com.athar.ems.service.EmployeeService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,7 +20,7 @@ public class EmployeeController {
     }
 
     @PostMapping
-    public ResponseEntity<EmployeeResponseDTO> createEmployee(@RequestBody EmployeeRequestDTO requestDTO){
+    public ResponseEntity<EmployeeResponseDTO> createEmployee(@Valid @RequestBody EmployeeRequestDTO requestDTO){
         EmployeeResponseDTO employee = employeeService.createEmployee(requestDTO);
         return ResponseEntity.ok(employee);
     }
@@ -29,6 +30,13 @@ public class EmployeeController {
 
         List<EmployeeResponseDTO> allEmployee = employeeService.getAllEmployee();
         return ResponseEntity.ok(allEmployee);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<EmployeeResponseDTO> getEmployee(@PathVariable Long id){
+
+        EmployeeResponseDTO employeeById = employeeService.getEmployeeById(id);
+        return ResponseEntity.ok(employeeById);
     }
 
 }
