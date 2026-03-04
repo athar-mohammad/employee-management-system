@@ -1,5 +1,6 @@
 package com.athar.ems.service;
 
+import com.athar.ems.dto.response.ApiResponse;
 import com.athar.ems.exception.ResourceAlreadyExistsException;
 import com.athar.ems.exception.ResourceNotFoundException;
 import com.athar.ems.mapper.EmployeeMapper;
@@ -26,7 +27,7 @@ public class EmployeeServiceImpl implements EmployeeService{
     @Override
     public EmployeeResponseDTO createEmployee(EmployeeRequestDTO requestDTO) {
         if(employeeRepository.existsByEmail(requestDTO.getEmail())){
-            throw new ResourceAlreadyExistsException("Email already exists");
+            throw new  ResourceAlreadyExistsException("Email already exists");
         }
         Employee employee = EmployeeMapper.mapToEmployee(requestDTO);
         Employee savedEmployee = employeeRepository.save(employee);
@@ -43,5 +44,13 @@ public class EmployeeServiceImpl implements EmployeeService{
     public EmployeeResponseDTO getEmployeeById(Long id) {
         Employee byId = employeeRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("User not found by the Id: "+id));
         return EmployeeMapper.mapToEmployeeResponseDTO(byId);
+    }
+
+    @Override
+    public void deleteById(Long id) {
+        if (employeeRepository.existsById(id)){
+            employeeRepository.deleteById(id);
+        }else
+            throw new ResourceNotFoundException("User not found with the Id: "+id);
     }
 }
